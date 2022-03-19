@@ -42,4 +42,15 @@ router.get("/:productCategory", (req, res) => {
   );
 });
 
+router.post("/", (req, res) => {
+  req.body["productId"] = uuidv4();
+  ProductController.create(req.body, (error, result) => {
+    if (error) {
+      res.status(500).send(error).end();
+    } else {
+      res.status(201).send(result).end();
+    }
+  });
+});
+
 module.exports = router;

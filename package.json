@@ -13,6 +13,7 @@
     "@aws-sdk/client-dynamodb": "^3.54.1",
     "dotenv": "^16.0.0",
     "dynamoose": "^2.8.5",
-    "express": "^4.17.3"
+    "express": "^4.17.3",
+    "uuid": "^8.3.2"
   }
 }

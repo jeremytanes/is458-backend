@@ -44,3 +44,13 @@ module.exports["getAllOfCategory"] = function (productCategory, callback) {
       }
     });
 };
+
+module.exports["create"] = function (product, callback) {
+  Product.create(product, (error, product) => {
+    if (error) {
+      callback(error, null);
+    } else {
+      callback(null, product);
+    }
+  });
+};

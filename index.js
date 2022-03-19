@@ -6,6 +6,7 @@ const { ListTablesCommand } = require("@aws-sdk/client-dynamodb");
 
 const Product = require("./routes/product");
 
+app.use(express.json());
 app.use("/product", Product);
 
 app.get("/", (req, res) => {
