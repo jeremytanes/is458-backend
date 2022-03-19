@@ -53,4 +53,18 @@ router.post("/", (req, res) => {
   });
 });
 
+router.delete("/:productCategory/:productId", (req, res) => {
+  ProductController.delete(
+    req.params.productCategory,
+    req.params.productId,
+    (error) => {
+      if (error) {
+        res.status(500).send(error).end();
+      } else {
+        res.status(201).send("Product deleted successfully.").end();
+      }
+    }
+  );
+});
+
 module.exports = router;

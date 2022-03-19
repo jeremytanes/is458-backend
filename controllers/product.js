@@ -54,3 +54,17 @@ module.exports["create"] = function (product, callback) {
     }
   });
 };
+
+module.exports["delete"] = function (partitionKey, sortKey, callback) {
+  let primaryKey = {
+    productCategory: partitionKey,
+    productId: sortKey,
+  };
+  Product.delete(primaryKey, (error) => {
+    if (error) {
+      callback(error);
+    } else {
+      callback("Product deleted successfully.");
+    }
+  });
+};
