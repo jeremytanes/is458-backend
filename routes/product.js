@@ -67,4 +67,14 @@ router.delete("/:productCategory/:productId", (req, res) => {
   );
 });
 
+router.patch("/", (req, res) => {
+  ProductController.update(req.body, (error) => {
+    if (error) {
+      res.status(500).send(error).end();
+    } else {
+      res.status(201).send("Product updated successfully.").end();
+    }
+  });
+});
+
 module.exports = router;
