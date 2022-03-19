@@ -7,13 +7,25 @@ const productSchema = new dynamoose.Schema(
       hashKey: true, // partition key
     },
     productId: {
-      type: Number,
+      type: String,
       rangeKey: true, //sort key
     },
-    name: String,
-    description: String,
-    price: Number,
-    productImageUrl: String,
+    name: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+    productImageUrl: {
+      type: String,
+      required: true,
+    },
   },
   {
     saveUnknown: false,

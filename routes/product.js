@@ -1,14 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const ProductController = require("../controllers/product");
+const { v4: uuidv4 } = require("uuid");
 
 router.get("/:productCategory/:productId", (req, res) => {
-  console.log("route /toys");
   ProductController.get(
     req.params.productCategory,
     req.params.productId,
     (error, result) => {
-      if (error) {
+      if (error == "Product not found.") {
+        res.status(404).send(error).end();
+      } else if (error) {
         res.status(500).send(error).end();
       } else {
         res.status(200).send(result).end();

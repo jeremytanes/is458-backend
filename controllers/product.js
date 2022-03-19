@@ -4,11 +4,11 @@ const Product = dynamoose.model("Product");
 module.exports["get"] = function (partitionKey, sortKey, callback) {
   let primaryKey = {
     productCategory: partitionKey,
-    productId: parseInt(sortKey),
+    productId: sortKey,
   };
   Product.get(primaryKey, (error, product) => {
     if (product == undefined) {
-      error = "Product does not exist.";
+      error = "Product not found.";
     }
     if (error) {
       callback(error, null);
@@ -22,10 +22,8 @@ module.exports["getAll"] = function (callback) {
   console.log("get all products");
   Product.scan().exec((error, products) => {
     if (error) {
-      console.log("ERROR", error);
       callback(error, null);
     } else {
-      console.log("PRODUCTS", products);
       callback(null, products);
     }
   });
