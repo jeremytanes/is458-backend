@@ -78,4 +78,21 @@ router.patch("/", (req, res) => {
   });
 });
 
+router.get("/price/:productCategory/:productId", (req, res) => {
+  ProductController.getAttributes(
+    req.params.productCategory,
+    req.params.productId,
+    ["price"],
+    (error, result) => {
+      if (error == "Product not found.") {
+        res.status(404).send(error).end();
+      } else if (error) {
+        res.status(500).send(error).end();
+      } else {
+        res.status(200).send(result).end();
+      }
+    }
+  );
+});
+
 module.exports = router;

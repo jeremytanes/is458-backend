@@ -75,13 +75,34 @@ module.exports["update"] = function (body, callback) {
   };
   delete body.productCategory;
   delete body.productId;
-  console.log(primaryKey);
-  console.log(body);
   Product.update(primaryKey, body, (error) => {
     if (error) {
       callback(error);
     } else {
       callback("Product updated successfully.");
+    }
+  });
+};
+
+module.exports["getAttributes"] = function (
+  partitionKey,
+  sortKey,
+  attributes,
+  callback
+) {
+  // "attributes" takes in an array of strings
+  let primaryKey = {
+    productCategory: partitionKey,
+    productId: sortKey,
+  };
+  Product.get(primaryKey, { attributes: attributes }, (error, product) => {
+    if (product == undefined) {
+      error = "Product not found.";
+    }
+    if (error) {
+      callback(error, null);
+    } else {
+      callback(null, product);
     }
   });
 };
