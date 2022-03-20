@@ -67,22 +67,3 @@ module.exports["delete"] = function (partitionKey, sortKey, callback) {
     }
   });
 };
-
-// TBC coz only fields are partitiion and sort keys
-// module.exports["update"] = function (body, callback) {
-//   let primaryKey = {
-//     productCategory: body.productCategory,
-//     productId: body.productId,
-//   };
-//   delete body.productCategory;
-//   delete body.productId;
-//   console.log(primaryKey);
-//   console.log(body);
-//   Product.update(primaryKey, body, (error) => {
-//     if (error) {
-//       callback(error);
-//     } else {
-//       callback("Product updated successfully.");
-//     }
-//   });
-// };
