@@ -5,9 +5,11 @@ const database = require("./database");
 const { ListTablesCommand } = require("@aws-sdk/client-dynamodb");
 
 const Product = require("./routes/product");
+const ProductCategory = require("./routes/productCategory");
 
 app.use(express.json());
 app.use("/product", Product);
+app.use("/productCategory", ProductCategory);
 
 app.get("/", (req, res) => {
   res.status(200).send("Hello, world!").end();
