@@ -2,7 +2,7 @@ const dynamoose = require("dynamoose");
 
 const transactionSchema = new dynamoose.Schema(
   {
-    purchaserEmail: {
+    email: {
       type: String,
       hashKey: true, // partition key
     },
@@ -11,7 +11,7 @@ const transactionSchema = new dynamoose.Schema(
       rangeKey: true, //sort key
     },
     totalPrice: {
-      type: String,
+      type: Number,
       required: true,
     },
     items: {
@@ -21,6 +21,10 @@ const transactionSchema = new dynamoose.Schema(
         {
           type: Object,
           schema: {
+            productCategory: {
+              type: String,
+              required: true,
+            },
             productId: {
               type: String,
               required: true,
