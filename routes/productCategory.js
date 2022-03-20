@@ -51,4 +51,18 @@ router.post("/", (req, res) => {
   });
 });
 
+router.delete("/:parentCategory/:productCategory", (req, res) => {
+  ProductCategoryController.delete(
+    req.params.parentCategory,
+    req.params.productCategory,
+    (error) => {
+      if (error) {
+        res.status(500).send(error).end();
+      } else {
+        res.status(201).send("Product Category deleted successfully.").end();
+      }
+    }
+  );
+});
+
 module.exports = router;

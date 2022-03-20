@@ -56,8 +56,8 @@ module.exports["create"] = function (productCategory, callback) {
 
 module.exports["delete"] = function (partitionKey, sortKey, callback) {
   let primaryKey = {
-    productCategory: partitionKey,
-    productId: sortKey,
+    parentCategory: partitionKey,
+    productCategory: sortKey,
   };
   ProductCategory.delete(primaryKey, (error) => {
     if (error) {
