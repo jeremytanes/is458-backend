@@ -43,6 +43,7 @@ router.get("/:productCategory", (req, res) => {
 });
 
 router.post("/", (req, res) => {
+  // incomplete. need to upload photo to s3 too.
   req.body["productId"] = uuidv4();
   ProductController.create(req.body, (error, result) => {
     if (error) {
