@@ -13,7 +13,7 @@ const productCategorySchema = new dynamoose.Schema(
   },
   {
     saveUnknown: false,
-    timestamps: true,
+    timestamps: false,
   }
 );
 
