@@ -3,6 +3,7 @@ const router = express.Router();
 const TransactionController = require("../controllers/transaction");
 const ProductController = require("../controllers/product");
 const { v4: uuidv4 } = require("uuid");
+const { transaction } = require("dynamoose");
 
 router.get("/:email/:transactionId", (req, res) => {
   TransactionController.get(
@@ -40,38 +41,65 @@ router.get("/:email", (req, res) => {
   });
 });
 
-// router.post("/", (req, res) => {
-//   console.log(req.body);
-//   let totalPrice = 0;
-//   for (let item of req.body["items"]) {
-//     console.log("ITEM", item);
-//     ProductController.getAttributes(
-//       item.productCategory,
-//       item.productId,
-//       ["price"],
-//       (error, result) => {
-//         if (error) {
-//           console.log("line 54");
-//           // add code to pass error to end response
-//         } else {
-//           item["subtotalPrice"] = result.price * item.quantity;
-//           totalPrice += item["subtotalPrice"];
-//         }
-//       }
-//     );
-//   }
+router.post("/", (req, res) => {
+  // create Promise from ProductController callback function
+  const getPrice = (product) =>
+    new Promise((resolve, reject) => {
+      ProductController.getAttributes(
+        product.productCategory,
+        product.productId,
+        ["price"],
+        (error, result) => {
+          if (error) {
+            reject(new Error(error));
+          } else {
+            product["price"] = result.price;
+            product["subtotalPrice"] = product.quantity * result.price;
+            resolve(product);
+          }
+        }
+      );
+    });
 
-//   req.body["totalPrice"] = totalPrice;
-//   req.body["transactionId"] = uuidv4();
-//   console.log("NEW ITEM", req.body);
-//   TransactionController.create(req.body, (error, result) => {
-//     if (error) {
-//       res.status(500).send(error).end();
-//     } else {
-//       res.status(201).send(result).end();
-//     }
-//   });
-// });
+  // add Promises to an array
+  promise_array = [];
+  for (let i in req.body.items) {
+    var p = getPrice(req.body.items[i]);
+    promise_array.push(p);
+  }
+
+  // run Promises and await all before showing results
+  Promise.all(promise_array)
+    .then((result) => {
+      let totalPrice = 0;
+      for (let product of result) {
+        totalPrice += product.subtotalPrice;
+      }
+
+      var transaction = {
+        transactionId: uuidv4(),
+        email: req.body.email,
+        totalPrice: totalPrice,
+        items: result,
+      };
+
+      // create Transaction in database and return result
+      TransactionController.create(transaction, (error, result) => {
+        if (error) {
+          res.status(500).send(error).end();
+        } else {
+          res.status(201).send(result).end();
+        }
+      });
+    })
+    .catch((error) => {
+      if (error.message == "Product not found.") {
+        res.status(404).send(error.message).end();
+      } else {
+        res.status(500).send(error.message).end();
+      }
+    });
+});
 
 router.delete("/:email/:transactionId", (req, res) => {
   TransactionController.delete(

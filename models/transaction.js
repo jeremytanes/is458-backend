@@ -33,6 +33,10 @@ const transactionSchema = new dynamoose.Schema(
               type: Number,
               required: true,
             },
+            price: {
+              type: Number,
+              required: true,
+            },
             subtotalPrice: {
               type: Number,
               required: true,
