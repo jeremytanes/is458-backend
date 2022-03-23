@@ -1,4 +1,6 @@
 const express = require("express");
+const stripe = require('stripe')('process.env.STRIPE_SECRET_KEY');
+
 require("dotenv").config();
 const app = express();
 const database = require("./database");
@@ -8,14 +10,40 @@ const Product = require("./routes/product");
 const ProductCategory = require("./routes/productCategory");
 const Transaction = require("./routes/transaction");
 
+
 app.use(express.json());
 app.use("/product", Product);
 app.use("/productCategory", ProductCategory);
 app.use("/transaction", Transaction);
+app.use(express.static('public')); // stripe static files
+
+const YOUR_DOMAIN = 'http://localhost:8080';
+
+//https://stripe.com/docs/payments/accept-a-payment?platform=web&ui=checkout#create-product-prices-upfront
+app.post('/create-checkout-session', async (req, res) => {
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+          price:'price_1KgLfpGi1xhtC9Ld7eXmf1wp',
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      success_url: `${YOUR_DOMAIN}/success.html`,
+      cancel_url: `${YOUR_DOMAIN}/cancel.html`,
+    });
+  
+    res.redirect(303, session.url);
+  });
+  
+
 
 app.get("/", (req, res) => {
   res.status(200).send("Hello, world!").end();
 });
+
+
 
 app.get("/table", (req, res) => {
   (async () => {
