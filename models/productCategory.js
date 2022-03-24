@@ -12,7 +12,6 @@ const productCategorySchema = new dynamoose.Schema(
     },
     productCategoryImageUrl: {
       type: String,
-      required: true,
     },
   },
   {
