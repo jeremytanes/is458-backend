@@ -10,6 +10,10 @@ const productCategorySchema = new dynamoose.Schema(
       type: String,
       rangeKey: true, //sort key
     },
+    productCategoryImageUrl: {
+      type: String,
+      required: true,
+    },
   },
   {
     saveUnknown: false,
