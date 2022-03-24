@@ -22,6 +22,12 @@ docker logs <container id>
 App listening on port 8080
 ```
 
+To stop the container:
+
+```
+docker stop <container id>
+
+```
 ## Running without Docker
 
 ```
