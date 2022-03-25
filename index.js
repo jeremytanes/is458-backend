@@ -80,11 +80,12 @@ app.post("/create-payment-intent", async (req, res) => {
       ]
     }
   */
-  let subtotal = 0;
+  let subtotal = 10;
   //Calculate & add to subtotal
   
   let tax = subtotal * 0.07
   let totalAmount = subtotal + tax;
+  totalAmount = +totalAmount.toFixed(2);
   const paymentIntent = await stripe.paymentIntents.create({
     amount: totalAmount*100,
     currency: "sgd",
