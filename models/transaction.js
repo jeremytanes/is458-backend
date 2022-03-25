@@ -61,7 +61,7 @@ const transactionSchema = new dynamoose.Schema(
       type: String,
       required: true,
     },
-    addressLineTwo: Number,
+    addressLineTwo: String,
     city: {
       type: String,
       required: true,
