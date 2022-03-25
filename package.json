@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.54.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "dynamoose": "^2.8.5",
     "express": "^4.17.3",

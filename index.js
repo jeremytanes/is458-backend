@@ -1,5 +1,6 @@
 const express = require("express");
 const stripe = require('stripe')('process.env.STRIPE_SECRET_KEY');
+const cors = require('cors');
 
 require("dotenv").config();
 const app = express();
@@ -10,6 +11,10 @@ const Product = require("./routes/product");
 const ProductCategory = require("./routes/productCategory");
 const Transaction = require("./routes/transaction");
 
+app.use(cors({
+  origin: '*',
+  methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
+}));
 
 app.use(express.json());
 app.use("/product", Product);
