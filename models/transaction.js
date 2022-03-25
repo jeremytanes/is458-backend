@@ -45,6 +45,31 @@ const transactionSchema = new dynamoose.Schema(
         },
       ],
     },
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+    },
+    phoneNumber: {
+      type: String,
+      required: true,
+    },
+    addressLineOne: {
+      type: String,
+      required: true,
+    },
+    addressLineTwo: Number,
+    city: {
+      type: String,
+      required: true,
+    },
+    country: {
+      type: String,
+      required: true,
+    },
   },
   {
     saveUnknown: false,

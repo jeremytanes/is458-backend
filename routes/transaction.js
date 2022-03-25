@@ -81,6 +81,13 @@ router.post("/", (req, res) => {
         email: req.body.email,
         totalPrice: totalPrice,
         items: result,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        phoneNumber: req.body.phoneNumber,
+        addressLineOne: req.body.addressLineOne,
+        addressLineTwo: req.body.addressLineTwo,
+        city: req.body.city,
+        country: req.body.country,
       };
 
       // create Transaction in database and return result
