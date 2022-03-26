@@ -85,21 +85,6 @@ app.get("/", (req, res) => {
   res.status(200).send("Hello, world!").end();
 });
 
-app.get("/table", (req, res) => {
-  (async () => {
-    const command = new ListTablesCommand({});
-    try {
-      const results = await database.client.send(command);
-      let tableNames = results.TableNames.join("\n");
-      console.log("TABLE NAMES:", tableNames);
-      res.status(200).send(tableNames).end();
-    } catch (err) {
-      console.error(err);
-      res.status(403).send("Forbidden").end();
-    }
-  })();
-});
-
 // Start the server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
