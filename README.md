@@ -28,9 +28,16 @@ To stop the container:
 docker stop <container id>
 
 ```
+
 ## Running without Docker
 
 ```
 npm install
 npm start
+```
+
+## Testing without Docker
+
+```
+npm test
 ```
