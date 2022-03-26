@@ -1,5 +1,5 @@
 const express = require("express");
-const cors = require('cors');
+const cors = require("cors");
 
 require("dotenv").config();
 const app = express();
@@ -10,18 +10,20 @@ const Product = require("./routes/product");
 const ProductCategory = require("./routes/productCategory");
 const Transaction = require("./routes/transaction");
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-app.use(cors({
-  origin: '*',
-  methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
-}));
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
+  })
+);
 
 app.use(express.json());
 app.use("/product", Product);
 app.use("/productCategory", ProductCategory);
 app.use("/transaction", Transaction);
-app.use(express.static('public')); // stripe static files
+app.use(express.static("public")); // stripe static files
 
 //const YOUR_DOMAIN = 'http://localhost:8080';
 //https://stripe.com/docs/payments/accept-a-payment?platform=web&ui=checkout#create-product-prices-upfront
@@ -43,70 +45,15 @@ app.use(express.static('public')); // stripe static files
 //     //res.redirect(303, session.url);
 // });
 
-//NEW
-app.post("/create-payment-intent", async (req, res) => {
-  const paymentDetails = req.body;
-  /*
-    {
-      "email": "robin.chong.2019@smu.edu.sg",
-      "firstName": "Robin",
-      "lastName": "Chong",
-      "phoneNumber": "+6590229102",
-      "addressLineOne": "81 Victoria St, Singapore 188065",
-      "addressLineTwo": "",
-      "city": "Singapore",
-      "country": "Singapore",
-      "items": [
-          {
-              "productId": "86875ccd-9944-48b5-8676-e8795edb7f22",
-              "productCategory": "Shirt",
-              "quantity": "4"
-          },
-          {
-              "productId": "e8207ef3-37bb-4eca-91dc-55699908f8bd",
-              "productCategory": "Camera",
-              "quantity": 1
-          },
-          {
-              "productId": "6bfdd7f2-8757-4df8-b9d4-2ce7fb6284d7",
-              "productCategory": "Camera",
-              "quantity": 1
-          },
-          {
-              "productId": "3a4dc877-6bcc-4dbe-832a-5a8770fdba91",
-              "productCategory": "Camera",
-              "quantity": 1
-          }
-      ]
-    }
-  */
-  let subtotal = 10;
-  //Calculate & add to subtotal
-  
-  let tax = subtotal * 0.07
-  let totalAmount = subtotal + tax;
-  totalAmount = +totalAmount.toFixed(2);
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: totalAmount*100,
-    currency: "sgd",
-    automatic_payment_methods: {
-      enabled: true,
-    },
-  });
-  res.send({
-    clientSecret: paymentIntent.client_secret,
-  });
-});
-
 // Webhook handler for asynchronous events. - https://github.com/stripe-samples/checkout-one-time-payments/blob/master/server/node/server.js
-app.post('/webhook', async (req, res) => {
+app.post("/webhook", async (req, res) => {
   let data;
   let eventType;
   // Check if webhook signing is configured.
   if (process.env.STRIPE_WEBHOOK_SECRET) {
     // Retrieve the event by verifying the signature using the raw body and secret.
     let event;
-    let signature = req.headers['stripe-signature'];
+    let signature = req.headers["stripe-signature"];
 
     try {
       event = stripe.webhooks.constructEvent(
@@ -128,7 +75,7 @@ app.post('/webhook', async (req, res) => {
     eventType = req.body.type;
   }
 
-  if (eventType === 'checkout.session.completed') {
+  if (eventType === "checkout.session.completed") {
     console.log(`🔔  Payment received!`);
   }
   res.sendStatus(200);
@@ -137,8 +84,6 @@ app.post('/webhook', async (req, res) => {
 app.get("/", (req, res) => {
   res.status(200).send("Hello, world!").end();
 });
-
-
 
 app.get("/table", (req, res) => {
   (async () => {

@@ -70,6 +70,14 @@ const transactionSchema = new dynamoose.Schema(
       type: String,
       required: true,
     },
+    status: {
+      type: String,
+      required: true,
+    },
+    stripePaymentIntentId: {
+      type: String,
+      required: true,
+    },
   },
   {
     saveUnknown: false,
