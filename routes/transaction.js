@@ -42,72 +42,75 @@ router.get("/:email", (req, res) => {
   });
 });
 
-router.post("/", (req, res) => {
-  // create Promise from ProductController callback function
-  const getPrice = (product) =>
-    new Promise((resolve, reject) => {
-      ProductController.getAttributes(
-        product.productCategory,
-        product.productId,
-        ["price"],
-        (error, result) => {
-          if (error) {
-            reject(new Error(error));
-          } else {
-            product["price"] = result.price;
-            product["subtotalPrice"] = product.quantity * result.price;
-            resolve(product);
-          }
-        }
-      );
-    });
+// !-----------------------------------------------------------------------------!
+// DEPRECATED in favour of POST /transaction/payment-intent
+// !-----------------------------------------------------------------------------!
+// router.post("/", (req, res) => {
+//   // create Promise from ProductController callback function
+//   const getPrice = (product) =>
+//     new Promise((resolve, reject) => {
+//       ProductController.getAttributes(
+//         product.productCategory,
+//         product.productId,
+//         ["price"],
+//         (error, result) => {
+//           if (error) {
+//             reject(new Error(error));
+//           } else {
+//             product["price"] = result.price;
+//             product["subtotalPrice"] = product.quantity * result.price;
+//             resolve(product);
+//           }
+//         }
+//       );
+//     });
 
-  // add Promises to an array
-  promise_array = [];
-  for (let i in req.body.items) {
-    var p = getPrice(req.body.items[i]);
-    promise_array.push(p);
-  }
+//   // add Promises to an array
+//   promise_array = [];
+//   for (let i in req.body.items) {
+//     var p = getPrice(req.body.items[i]);
+//     promise_array.push(p);
+//   }
 
-  // run Promises and await all before showing results
-  Promise.all(promise_array)
-    .then((result) => {
-      let totalPrice = 0;
-      for (let product of result) {
-        totalPrice += product.subtotalPrice;
-      }
+//   // run Promises and await all before showing results
+//   Promise.all(promise_array)
+//     .then((result) => {
+//       let totalPrice = 0;
+//       for (let product of result) {
+//         totalPrice += product.subtotalPrice;
+//       }
 
-      var transaction = {
-        transactionId: uuidv4(),
-        email: req.body.email,
-        totalPrice: totalPrice,
-        items: result,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        phoneNumber: req.body.phoneNumber,
-        addressLineOne: req.body.addressLineOne,
-        addressLineTwo: req.body.addressLineTwo,
-        city: req.body.city,
-        country: req.body.country,
-      };
+//       var transaction = {
+//         transactionId: uuidv4(),
+//         email: req.body.email,
+//         totalPrice: totalPrice,
+//         items: result,
+//         firstName: req.body.firstName,
+//         lastName: req.body.lastName,
+//         phoneNumber: req.body.phoneNumber,
+//         addressLineOne: req.body.addressLineOne,
+//         addressLineTwo: req.body.addressLineTwo,
+//         city: req.body.city,
+//         country: req.body.country,
+//       };
 
-      // create Transaction in database and return result
-      TransactionController.create(transaction, (error, result) => {
-        if (error) {
-          res.status(500).send(error).end();
-        } else {
-          res.status(201).send(result).end();
-        }
-      });
-    })
-    .catch((error) => {
-      if (error.message == "Product not found.") {
-        res.status(404).send(error.message).end();
-      } else {
-        res.status(500).send(error.message).end();
-      }
-    });
-});
+//       // create Transaction in database and return result
+//       TransactionController.create(transaction, (error, result) => {
+//         if (error) {
+//           res.status(500).send(error).end();
+//         } else {
+//           res.status(201).send(result).end();
+//         }
+//       });
+//     })
+//     .catch((error) => {
+//       if (error.message == "Product not found.") {
+//         res.status(404).send(error.message).end();
+//       } else {
+//         res.status(500).send(error.message).end();
+//       }
+//     });
+// });
 
 router.post("/payment-intent", async (req, res) => {
   // create Promise from ProductController callback function
