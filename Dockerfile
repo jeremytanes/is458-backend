@@ -8,12 +8,19 @@ WORKDIR /usr/src/app
 # where available (npm@5+)
 COPY package*.json ./
 
-RUN npm install
-# If you are building your code for production
-# RUN npm ci --only=production
+RUN npm update && \
+    npm install -g mocha
 
 # Bundle app source
 COPY . .
+
+ENV CI=True
+RUN npm install
+RUN npm test
+# If you are building your code for production
+# RUN npm ci --only=production
+
+
 
 EXPOSE 8080
 CMD [ "node", "index.js" ]

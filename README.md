@@ -39,5 +39,5 @@ npm start
 ## Testing without Docker
 
 ```
-npm test
+Testing is integrated when building the image which includes running npm test for all test files under the test folder (mocha test/**/*.js)
 ```
