@@ -51,6 +51,18 @@ router.post("/", (req, res) => {
   });
 });
 
+router.post("/batchPut", (req, res) => {
+  ProductCategoryController.batchPut(req.body, (error, result) => {
+    if (error) {
+      console.log("You suck");
+      res.status(500).send(error).end();
+    } else {
+      console.log("Success");
+      res.status(201).send(result).end();
+    }
+  });
+});
+
 router.delete("/:parentCategory/:productCategory", (req, res) => {
   ProductCategoryController.delete(
     req.params.parentCategory,
