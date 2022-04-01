@@ -12,6 +12,9 @@ const Transaction = require("./routes/transaction");
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
+const { v4: uuidv4 } = require("uuid");
+const containerId = uuidv4();
+
 app.use(
   cors({
     origin: "*",
@@ -83,6 +86,10 @@ app.post("/webhook", async (req, res) => {
 
 app.get("/", (req, res) => {
   res.status(200).send("Hello, world!").end();
+});
+
+app.get("/container", (req, res) => {
+  res.status(200).send(containerId).end();
 });
 
 // Start the server
