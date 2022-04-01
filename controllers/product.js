@@ -54,6 +54,16 @@ module.exports["create"] = function (product, callback) {
   });
 };
 
+module.exports["batchPut"] = async function (products, callback) {
+  await Product.batchPut(products, (error, products) => {
+    if (error) {
+      callback(error, null);
+    } else {
+      callback(null, products);
+    }
+  });
+};
+
 module.exports["delete"] = function (partitionKey, sortKey, callback) {
   let primaryKey = {
     productCategory: partitionKey,

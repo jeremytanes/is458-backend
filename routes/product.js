@@ -54,6 +54,22 @@ router.post("/", (req, res) => {
   });
 });
 
+router.post("/batchPut", (req, res) => {
+  // incomplete. need to upload photo to s3 too.
+  for (let product of req.body) {
+    product["productId"] = uuidv4();
+  }
+  ProductController.batchPut(req.body, (error, result) => {
+    if (error) {
+      console.log("You suck");
+      res.status(500).send(error).end();
+    } else {
+      console.log("Success");
+      res.status(201).send(result).end();
+    }
+  });
+});
+
 router.delete("/:productCategory/:productId", (req, res) => {
   ProductController.delete(
     req.params.productCategory,
